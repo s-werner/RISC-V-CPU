@@ -21,9 +21,9 @@ module data_memory(
     always @(*) begin
         if (MemRead && MemWrite)
             $warning("Simultaneous read and write - this shouldn't happen!");
-        if (address[1:0] != 2'b00)
+        if ((MemWrite || MemRead) && address[1:0] != 2'b00)
             $warning("Misaligned data address: %h", address);
-        if (address[31:2] >= MEM_SIZE)
+        if ((MemWrite || MemRead) && address[31:2] >= MEM_SIZE)
             $warning("Data memory access out of bounds! Address %h (word index %0d >= memory size %0d)", address, address[31:2], MEM_SIZE);
             
         if (MemRead)
